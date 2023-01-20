@@ -1,3 +1,4 @@
+name: Pre-2023 Website Deploy
 on:
   workflow_dispatch:
   push: 
@@ -6,9 +7,6 @@ on:
   pull_request: 
     branches:
       - 'main'
-
-name: Pre-2023 Website Deploy
-
 jobs:
   gh-pages-deploy:
     runs-on: ubuntu-latest
