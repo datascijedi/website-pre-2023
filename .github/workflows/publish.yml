@@ -1,9 +1,11 @@
 on:
   workflow_dispatch:
   push: 
-    branches: main
+    branches:
+      - 'main'
   pull_request: 
-    branches: main
+    branches:
+      - 'main'
 
 name: Pre-2023 Website Deploy
 
@@ -22,19 +24,19 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: . # The folder the action should deploy.
-	netlify-deploy:
-		name: Netlify Deploy Test
-		runs-on: ubuntu-latest
+  netlify-deploy:
+    name: Netlify Deploy Test
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-	  			uses: actions/checkout@v2
-			- name: Deploy
-				if: github.event_name != 'pull_request'
-		    uses: nwtgck/actions-netlify@v1.2
-			 	with:
+          uses: actions/checkout@v2
+      - name: Deploy
+        if: github.event_name != 'pull_request'
+        uses: nwtgck/actions-netlify@v1.2
+         with:
           publish-dir: '.'
           production-branch: netlify-deploy
-		  			production-deploy: false
+            production-deploy: false
           deploy-message: "Deploy from GitHub Actions"
           enable-pull-request-comment: false
           enable-commit-comment: false
