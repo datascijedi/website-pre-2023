@@ -1,6 +1,6 @@
 name: Pre-2023 Website Deploy
 on:
-  workflow_dispatch:
+  workflow_dispatch
   push: 
     branches:
       - 'main'
