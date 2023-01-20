@@ -10,8 +10,6 @@ name: Pre-2023 Website Deploy
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
     steps:
