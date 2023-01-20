@@ -29,14 +29,27 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Deploy
-        if: github.event_name != 'pull_request'
+      - name: Non-Production PR Deploy
+        if: github.event_name == 'pull_request'
         uses: nwtgck/actions-netlify@v1.2
         with:
           publish-dir: '.'
-          production-branch: netlify-deploy
+          production-deploy: false
+          deploy-message: "Non-Production PR Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: false
+          overwrites-pull-request-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1
+      - name: Production Deploy
+        if: github.event_name == 'push'
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: '.'
           production-deploy: true
-          deploy-message: "Deploy from GitHub Actions"
+          deploy-message: "Production Deploy from GitHub Actions"
           enable-pull-request-comment: false
           enable-commit-comment: false
           overwrites-pull-request-comment: false
