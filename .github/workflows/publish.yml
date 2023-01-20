@@ -28,12 +28,12 @@ jobs:
     name: Netlify Deploy Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-          uses: actions/checkout@v2
+      - name: Check out repository
+        uses: actions/checkout@v2
       - name: Deploy
         if: github.event_name != 'pull_request'
         uses: nwtgck/actions-netlify@v1.2
-         with:
+        with:
           publish-dir: '.'
           production-branch: netlify-deploy
             production-deploy: false
