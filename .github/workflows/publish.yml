@@ -14,8 +14,8 @@ jobs:
   gh-pages-deploy:
     name: GitHub Pages Deploy
     if: |
-      ${{ github.event_name == 'push' && github.ref_name == 'main' 
-       || github.event_name == 'workflow_dispatch' && github.ref_name == 'main' }}
+      ${{ (github.event_name == 'push' && github.ref_name == 'main')
+       || (github.event_name == 'workflow_dispatch' && github.ref_name == 'main') }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -51,8 +51,8 @@ jobs:
   netlify-production-deploy:
     name: Netlify Production Deploy
     if: |
-      ${{ github.event_name == 'push' && github.ref_name == 'main' 
-       || github.event_name == 'workflow_dispatch' && github.ref_name == 'main' }}
+      ${{ (github.event_name == 'push' && github.ref_name == 'main')
+       || (github.event_name == 'workflow_dispatch' && github.ref_name == 'main') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
