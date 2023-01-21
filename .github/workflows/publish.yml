@@ -48,7 +48,9 @@ jobs:
         timeout-minutes: 1
   netlify-production-deploy:
     name: Netlify Production Deploy
-    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    if: |
+      ${{ github.event_name == 'push' && github.ref_name == 'main' 
+       || github.event_name == 'workflow_dispatch' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -66,21 +68,3 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_TEST_RM }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_TEST_RM }}
         timeout-minutes: 1
-  test-workflow_dispatch-job-main:
-    name: Test `workflow_dispatch` (main branch)
-    if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name == 'main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo 'This is a test job for the `workflow_dispatch` event for branch `main`'
-      - run: echo ${{ github.event_name }}
-      - run: echo ${{ github.event }}
-      - run: echo ${{ github.ref_name }}
-  test-workflow_dispatch-job-non-main:
-    name: Test `workflow_dispatch` (non-main branch)
-    if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo 'This is a test job for the `workflow_dispatch` event for branches other than `main`'
-      - run: echo ${{ github.event_name }}
-      - run: echo ${{ github.event }}
-      - run: echo ${{ github.ref_name }}
