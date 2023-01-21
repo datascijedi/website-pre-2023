@@ -70,5 +70,5 @@ jobs:
     steps:
       - run: echo 'This is a test job for the `workflow_dispatch` event for branch `main`'
       - run: echo ${{ github.event_name }}
-      - run: echo ${{ github.event_type }}
-      - run: echo ${{ github }}
+      - run: echo ${{ Object.getOwnPropertyNames(github) }}
+      - run: echo ${{ Object.keys(github) }}
