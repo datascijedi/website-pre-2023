@@ -7,6 +7,9 @@ on:
   pull_request: 
     branches:
       - 'main'
+    type:
+      - opened
+      - synchronize
 jobs:
   gh-pages-deploy:
     name: GitHub Pages Deploy
@@ -23,19 +26,19 @@ jobs:
           folder: .        # The folder the action should deploy.
           branch: gh-pages # The branch the action should deploy to.
         timeout-minutes: 1
-  netlify-non-prod-deploy:
-    name: Netlify Non-Prod Deploy
+  netlify-deploy-preview:
+    name: Netlify Deploy Preview
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Non-Production PR Deploy
+      - name: Deploy
         uses: nwtgck/actions-netlify@v1.2
         with:
           publish-dir: '.'
           production-deploy: false
-          deploy-message: "Non-Production PR Deploy from GitHub Actions"
+          deploy-message: "Deploy Preview from GitHub Actions"
           enable-pull-request-comment: false
           enable-commit-comment: false
           overwrites-pull-request-comment: false
@@ -43,14 +46,14 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_TEST_RM }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_TEST_RM }}
         timeout-minutes: 1
-  netlify-prod-deploy:
-    name: Netlify Prod Deploy
+  netlify-production-deploy:
+    name: Netlify Production Deploy
     if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Production Deploy
+      - name: Deploy
         uses: nwtgck/actions-netlify@v1.2
         with:
           publish-dir: '.'
@@ -63,11 +66,21 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_TEST_RM }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_TEST_RM }}
         timeout-minutes: 1
-  test-workflow_dispatch-job:
-    name: Test for `workflow_dispatch`
+  test-workflow_dispatch-job-main:
+    name: Test `workflow_dispatch` (main branch)
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - run: echo 'This is a test job for the `workflow_dispatch` event for branch `main`'
       - run: echo ${{ github.event_name }}
       - run: echo ${{ github.event }}
+      - run: echo ${{ github.ref_name }}
+  test-workflow_dispatch-job-non-main:
+    name: Test `workflow_dispatch` (non-main branch)
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name != 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'This is a test job for the `workflow_dispatch` event for branches other than `main`'
+      - run: echo ${{ github.event_name }}
+      - run: echo ${{ github.event }}
+      - run: echo ${{ github.ref_name }}
