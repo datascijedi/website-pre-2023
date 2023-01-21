@@ -68,7 +68,7 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
-      run: echo 'This is a test job for the `workflow_dispatch` event for branch `main`'
-      run: echo ${{ github.event_name }}
-      run: echo ${{ github.event_type }}
-      run: echo ${{ github }}
+      - run: echo 'This is a test job for the `workflow_dispatch` event for branch `main`'
+      - run: echo ${{ github.event_name }}
+      - run: echo ${{ github.event_type }}
+      - run: echo ${{ github }}
