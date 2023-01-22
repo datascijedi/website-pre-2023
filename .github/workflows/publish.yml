@@ -1,4 +1,4 @@
-name: Pre-2023 Website Deploy Test
+name: Website Deploy
 on:
   workflow_dispatch:
   push:
@@ -30,7 +30,7 @@ jobs:
         timeout-minutes: 1
   netlify-deploy-preview:
     name: Netlify Deploy Preview
-    if: ${{ github.event_name == 'pull_request' }}
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -53,8 +53,8 @@ jobs:
   netlify-production-deploy:
     name: Netlify Production Deploy
     if: |
-      ${{ (github.event_name == 'push' && github.ref_name == 'main')
-       || (github.event_name == 'workflow_dispatch' && github.ref_name == 'main') }}
+      (github.event_name == 'push' && github.ref_name == 'main')
+      || (github.event_name == 'workflow_dispatch' && github.ref_name == 'main')
     runs-on: ubuntu-latest
     permissions:
       contents: write
